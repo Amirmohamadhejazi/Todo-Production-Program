@@ -106,34 +106,6 @@ hr{
   }
 }
 
-#changePasswordEmail{
-  .App {
-    height: 60rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: sans-serif;
-    text-align: center;
-
-  }
-  .form {
-    direction: ltr;
-    width: 330px;
-    display: flex;
-    flex-direction: column;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-  }
-
-  .form .form__custom-button {
-    margin-top: 50px;
-  }
-  .iconChange{
-    font-size: 80px!important;
-    color: green!important;
-  }
-}
 
 input[type="color"]{
   appearance: auto;
@@ -155,5 +127,4 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
-//linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
 

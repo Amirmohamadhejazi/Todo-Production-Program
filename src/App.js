@@ -8,7 +8,6 @@ import Home from "./Component/Home/Home";
 import Error404 from "./Component/Error/Error404/Error404";
 import { wrapper } from "./Redux/store";
 function App() {
-
   return (
       <>
           <Routes>

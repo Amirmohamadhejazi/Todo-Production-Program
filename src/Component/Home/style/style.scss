@@ -1,70 +1,10 @@
 #home{
-
-.itemsShop{
-
-}
-
-  padding-top: 20px;
-  color: white;
-  .iconTitleCard{
-    font-size: 30px;
-    margin: 0 10px 0 10px;
+  .ItemTodo{
+    width: 100%;
+    height: 70px;
+    background-color: #5846f9;
+    border-radius: 5px;
   }
-
-  .itemBox{
-    position: relative;
-    --tw-bg-opacity: 1;
-    background-color: rgba(27,52,77,var(--tw-bg-opacity));
-    padding-top: 8rem;
-    margin: 50px 20px 0 20px;
-    width: 280px;
-    border-radius: 20px;
-  }
-
-  .textList {
-
-    --tw-text-opacity: 1;
-    color: rgba(59, 130, 246, var(--tw-text-opacity));
-    font-size: 12px;
-
-  }
-
-
-  @media only screen and (max-width: 600px) {
-    .itemsShop{
-      justify-content: center;
-    }
-  }
-
-}
-//.SelectColor , .SelectProfile{
-//  outline:#F94C66 4px solid  ;
-//  transition: 0.2s;
-//  border-radius:7px
-//}
-//.SelectProfile{
-//  display: flex;
-//  border-radius:50%
-//}
-
-.SelectProfile{
-  outline:#F94C66 4px solid;
-  animation: color 8s infinite linear;
-  transition: 0.2s;
-  display: flex;
-  border-radius:50%
-}
-@keyframes color {
-  0%   { outline:#F94C66 4px solid  }
-  20%  { outline: #6666ff 4px solid }
-  40%  { outline: #0099ff 4px solid  }
-  60%  { outline: #00ff00 4px solid  }
-  80%  { outline: #ff3399 4px solid  }
-  100% { outline: #6666ff 4px solid  }
-}
-
-.iconAvatarProf{
-  font-size: 40px!important;
 }
 
 
