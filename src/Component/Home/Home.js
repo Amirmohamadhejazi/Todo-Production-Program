@@ -4,10 +4,16 @@ import Fade from 'react-reveal/Fade';
 import TextField from "@mui/material/TextField";
 import Button from '@mui/material/Button';
 import Avatar from "../Home/picture/avatar1.png"
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CancelIcon from '@mui/icons-material/Cancel';
+import EditIcon from '@mui/icons-material/Edit';
+import DoneIcon from '@mui/icons-material/Done';
 
 function Home() {
 
     const [InputData,SetInput] = useState({name:"" ,description:""})
+    const [InputEditData,SetInputEditData] = useState({name:"" ,description:""})
+    const [EditRow,SetEditRow] = useState({EditMode : false , indexEdit : null})
     const [TodoList,SetTodoList] = useState([])
     const [NumberArray,SetNumberArray] = useState(0)
 
@@ -28,14 +34,43 @@ function Home() {
 
             SetTodoList([...TodoList,DataNew])
             SetNumberArray(TodoList.length===0 ? NumberArray : NumberArray+1)
-            SetInput({name:"" ,description:""})
+            SetInput({name:"" ,description:""  })
         }
         console.log(index)
     }
     function handlerDelete(Index) {
         let DataRemove = TodoList[Index]
-        SetTodoList(TodoList.filter(item => item.id != DataRemove.id))
+        SetTodoList(TodoList.filter(item => item.id !== DataRemove.id))
     }
+
+
+
+    function handlerEdit(data) {
+         let {Index ,position , Row } = data
+        SetInputEditData(Row)
+        SetEditRow({EditMode : position , indexEdit : position === false ? null : Index})
+    }
+
+    function Edit(index) {
+        SetTodoList(current =>
+            current.map(obj => {
+                if (obj.id === index) {
+                    SetEditRow({EditMode : false , indexEdit : null})
+                    SetInputEditData({name:"" ,description:""})
+                    return {...obj, name: InputEditData.name, description: InputEditData.description , id:InputEditData.id};
+                }
+                return obj;
+            }),
+        );
+
+    }
+
+    useEffect(()=>{
+        console.log("TodoList")
+        console.log(TodoList)
+        console.log("TodoList")
+    } , [TodoList])
+
 
     return (
 
@@ -48,30 +83,32 @@ function Home() {
                         </div>
                         <div className="row ">
                             <div className="col-md-12">
-                                <TextField
-                                    fullWidth
-                                    id="name"
-                                    name="name"
-                                    label="name"
-                                    type="text"
-                                    className="mt-2"
-                                    value={InputData.name}
-                                    onChange={(e)=>SetInput({...InputData , name : e.target.value})}
-                                />
-                                <TextField
-                                    fullWidth
-                                    id="description"
-                                    name="description"
-                                    label="description"
-                                    type="text"
-                                    className="mt-2"
-                                    value={InputData.description}
-                                    onChange={(e)=>SetInput({...InputData , description : e.target.value})}
-                                />
+                                <form >
+                                    <TextField
+                                        fullWidth
+                                        id="name"
+                                        name="name"
+                                        label="name"
+                                        type="text"
+                                        className="mt-2"
+                                        value={InputData.name}
+                                        onChange={(e)=>SetInput({...InputData , name : e.target.value})}
+                                    />
+                                    <TextField
+                                        fullWidth
+                                        id="description"
+                                        name="description"
+                                        label="description"
+                                        type="text"
+                                        className="mt-2"
+                                        value={InputData.description}
+                                        onChange={(e)=>SetInput({...InputData , description : e.target.value})}
+                                    />
 
-                                <div className="mt-4 text-right">
-                                    <Button variant="outlined" onClick={()=>handlerSubmit()}>Add</Button>
-                                </div>
+                                    <div className="mt-4 text-right">
+                                        <Button variant="outlined" onClick={()=>handlerSubmit()}>Add</Button>
+                                    </div>
+                                </form>
 
                             </div>
 
@@ -87,11 +124,50 @@ function Home() {
                                     <div className="ItemTodo d-flex  p-3  mt-2 mb-2">
                                         <div className="w-100 d-flex justify-content-between align-items-center">
                                             <div style={{width:"45px" , height:"45px" , borderRadius:"50%" , overflow:"hidden"}}>
-                                                <img src={Avatar} width="100%" height="100%" alt=""/></div>
-                                            <span>{item.name}</span>
-                                            <span>{item.description}</span>
-                                            <Button variant="contained" color="error" onClick={() => handlerDelete(index)}>D</Button>
-                                        </div>
+                                                <img src={Avatar} width="100%" height="100%" alt={Avatar}/>
+                                            </div>
+                                            {EditRow.indexEdit ===  index ? <>
+                                                    <TextField
+                                                        id="name"
+                                                        label="Name"
+                                                        variant="standard"
+                                                        name="name"
+                                                        type="text"
+                                                        className="mt-2"
+                                                        value={InputEditData.name}
+                                                        onChange={(e)=>SetInputEditData({...InputEditData , name : e.target.value})}
+                                                    />
+                                                    <TextField
+                                                        id="description"
+                                                        name="description"
+                                                        variant="standard"
+                                                        label="Description"
+                                                        type="text"
+                                                        className="mt-2"
+                                                        value={InputEditData.description}
+                                                        onChange={(e)=>SetInputEditData({...InputEditData , description : e.target.value})}
+                                                    />
+                                                </>
+                                                : <>
+                                                    <span className=" overflowText" >{item.name}</span>
+                                                    <span className=" overflowText">{item.description}</span>
+                                                </>
+                                            }
+
+
+
+                                            <div className="d-flex flex-row">
+                                                    {EditRow.indexEdit ===  index &&
+                                                        <Fade>
+                                                            <Button variant="contained" color="success" onClick={() => Edit(index)}><DoneIcon fontSize="small" /></Button>
+                                                        </Fade>
+                                                    }
+                                                    <Button variant="contained" color={EditRow.indexEdit ===  index ? "error" : "primary"}  style={{margin:"0 20px 0 20px"}} onClick={() => handlerEdit(EditRow.indexEdit ===  index ? {Index: index ,position: false} :  {Index: index ,position: true  , Row:item})}>
+                                                        {EditRow.indexEdit ===  index ? <CancelIcon fontSize="small" /> : <EditIcon fontSize="small" />}
+                                                    </Button>
+                                                </div>
+                                                <Button variant="contained" color="secondary" onClick={() => handlerDelete(index)}><DeleteOutlineIcon fontSize="small" /></Button>
+                                            </div>
                                     </div>
                                 </Fade>
                             )
