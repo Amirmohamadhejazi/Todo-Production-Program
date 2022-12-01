@@ -11,36 +11,35 @@ import DoneIcon from '@mui/icons-material/Done';
 
 function Home() {
 
+    // localStorage.setItem('DataTodoListLocal', JSON.stringify([]) )
+
+    let DataTodoListLocal = localStorage.getItem('DataTodoListLocal');
+    const restoredSession = JSON.parse(DataTodoListLocal);
     const [InputData,SetInput] = useState({name:"" ,description:""})
     const [InputEditData,SetInputEditData] = useState({name:"" ,description:""})
     const [EditRow,SetEditRow] = useState({EditMode : false , indexEdit : null})
-    const [TodoList,SetTodoList] = useState([])
+    const [TodoList,SetTodoList] = useState(restoredSession? restoredSession : [])
     const [NumberArray,SetNumberArray] = useState(0)
 
-    useEffect(()=>{
-        console.log("TodoList")
-        console.log(TodoList)
-        console.log("TodoList")
-    },[TodoList])
 
-    function handlerSubmit(data,index) {
-
+    function handlerSubmit() {
         if (InputData.name !== "" && InputData.description !== ""){
             let DataNew = {
                 description: `${InputData.description}`,
                 name:`${InputData.name}`,
                 id:TodoList.length===0 ? NumberArray : NumberArray+1
             }
-
             SetTodoList([...TodoList,DataNew])
+            localStorage.setItem('DataTodoListLocal', JSON.stringify([...TodoList,DataNew]) )
             SetNumberArray(TodoList.length===0 ? NumberArray : NumberArray+1)
             SetInput({name:"" ,description:""  })
         }
-        console.log(index)
     }
     function handlerDelete(Index) {
         let DataRemove = TodoList[Index]
-        SetTodoList(TodoList.filter(item => item.id !== DataRemove.id))
+        let NewTodo= TodoList.filter(item => item.id !== DataRemove.id)
+        SetTodoList(NewTodo)
+        localStorage.setItem('DataTodoListLocal', JSON.stringify(NewTodo) )
     }
 
 
@@ -52,25 +51,17 @@ function Home() {
     }
 
     function Edit(index) {
-        SetTodoList(current =>
-            current.map(obj => {
+        let NewDataEdit = TodoList.map(obj => {
                 if (obj.id === index) {
                     SetEditRow({EditMode : false , indexEdit : null})
                     SetInputEditData({name:"" ,description:""})
                     return {...obj, name: InputEditData.name, description: InputEditData.description , id:InputEditData.id};
                 }
                 return obj;
-            }),
-        );
-
+            })
+        SetTodoList(NewDataEdit)
+        localStorage.setItem('DataTodoListLocal', JSON.stringify(NewDataEdit) )
     }
-
-    useEffect(()=>{
-        console.log("TodoList")
-        console.log(TodoList)
-        console.log("TodoList")
-    } , [TodoList])
-
 
     return (
 
@@ -120,8 +111,8 @@ function Home() {
                     <div className="p-3">
                         {
                             TodoList.map((item, index) =>
-                                <Fade>
-                                    <div className="ItemTodo d-flex  p-3  mt-2 mb-2">
+                                    <div className="ItemTodo d-flex  p-3  mt-2 mb-2" key={index}>
+                                        <Fade>
                                         <div className="w-100 d-flex justify-content-between align-items-center">
                                             <div style={{width:"45px" , height:"45px" , borderRadius:"50%" , overflow:"hidden"}}>
                                                 <img src={Avatar} width="100%" height="100%" alt={Avatar}/>
@@ -154,8 +145,6 @@ function Home() {
                                                 </>
                                             }
 
-
-
                                             <div className="d-flex flex-row">
                                                     {EditRow.indexEdit ===  index &&
                                                         <Fade>
@@ -168,8 +157,8 @@ function Home() {
                                                 </div>
                                                 <Button variant="contained" color="secondary" onClick={() => handlerDelete(index)}><DeleteOutlineIcon fontSize="small" /></Button>
                                             </div>
+                                        </Fade>
                                     </div>
-                                </Fade>
                             )
                         }
                     </div>
