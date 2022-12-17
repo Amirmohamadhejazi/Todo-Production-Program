@@ -11,8 +11,6 @@ import DoneIcon from '@mui/icons-material/Done';
 
 function Home() {
 
-    // localStorage.setItem('DataTodoListLocal', JSON.stringify([]) )
-
     let DataTodoListLocal = localStorage.getItem('DataTodoListLocal');
     const restoredSession = JSON.parse(DataTodoListLocal);
     const [InputData,SetInput] = useState({name:"" ,description:""})
